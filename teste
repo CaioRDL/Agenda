@@ -1,0 +1,69 @@
+AGENDA = {} #Váriavel maiscula para declarar como global
+
+AGENDA['teste'] = {
+    "nome": "Caio",
+    "ramal": "6768",
+    "setor": "T.I",
+    "tempo": "120",
+    "ipMaquina": "172.16.5.22",
+    "descProblema": "teste",
+    "data": "01/11/2023"
+}
+def mostrarContato():
+    for contato in AGENDA:
+        buscarContato(contato)
+        print("----------------------")
+
+def buscarContato(contato):
+    print("Nome", contato)
+    print("Ramal", AGENDA[contato]['ramal'])
+    print("Setor", AGENDA[contato]['setor'])
+    print("Tempo", AGENDA[contato]['tempo'])
+    print("IP", AGENDA[contato]['ipMaquina'])
+    print("Descrição", AGENDA[contato]['descProblema'])
+    print("Data", AGENDA[contato]['data'])
+
+def inserirContato(contato, nome,ramal,setor,tempo,ipMaquina,descProblema,data):
+    AGENDA[contato] = {
+        'nome': nome,
+        'ramal': ramal,
+        'setor': setor,
+        'tempo': tempo,
+        'ipMaquina': ipMaquina,
+        'descProblema': descProblema,
+        'data': data
+    }
+def main():    
+    print("1 - Mostrar Contato ")
+    print("2 - Buscar Contato ")
+    print("3 - Inserir Contato ")
+    print("0 - Para fechar o Programa")
+main()
+
+while True:
+    opcao = input("Digite uma opcao " )
+
+    if(opcao == "1"):
+        mostrarContato()
+
+    elif(opcao == "2"):
+        contato = input("Digite o nome do usuário: ")
+        buscarContato(contato)
+
+    elif(opcao == "3"):
+        
+            contato = input("Digite o nome do usuário: ")
+            ramal = input("Ramal do usuário: ")
+            setor = input("Setor: ")
+            tempo = input("Tempo estimado: ")
+            ipMaquina = input("IP da máquina: ")
+            descProblema = input("Descrição do problema: ")
+            data = input("Data: ")
+            inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data)
+        
+    elif(opcao == "0"):
+        print("Fechando o programa")
+        break
+
+    else:
+        print("Opção invalida".format(opcao))
