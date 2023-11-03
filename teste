@@ -1,7 +1,6 @@
 AGENDA = {} #Váriavel maiscula para declarar como global
 
-AGENDA['teste'] = {
-    "nome": "Caio",
+AGENDA['caio'] = {
     "ramal": "6768",
     "setor": "T.I",
     "tempo": "120",
@@ -23,9 +22,8 @@ def buscarContato(contato):
     print("Descrição", AGENDA[contato]['descProblema'])
     print("Data", AGENDA[contato]['data'])
 
-def inserirContato(contato, nome,ramal,setor,tempo,ipMaquina,descProblema,data):
+def inserirContato(contato, ramal,setor,tempo,ipMaquina,descProblema,data):
     AGENDA[contato] = {
-        'nome': nome,
         'ramal': ramal,
         'setor': setor,
         'tempo': tempo,
@@ -37,6 +35,7 @@ def main():
     print("1 - Mostrar Contato ")
     print("2 - Buscar Contato ")
     print("3 - Inserir Contato ")
+    print("4 - Exportar Relatório ")
     print("0 - Para fechar o Programa")
 main()
 
@@ -51,16 +50,30 @@ while True:
         buscarContato(contato)
 
     elif(opcao == "3"):
-        
-            contato = input("Digite o nome do usuário: ")
-            ramal = input("Ramal do usuário: ")
-            setor = input("Setor: ")
-            tempo = input("Tempo estimado: ")
-            ipMaquina = input("IP da máquina: ")
-            descProblema = input("Descrição do problema: ")
-            data = input("Data: ")
-            inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data)
-        
+        contato = input("Digite o nome do usuário: ")
+        ramal = input("Ramal do usuário: ")
+        setor = input("Setor: ")
+        tempo = input("Tempo estimado: ")
+        ipMaquina = input("IP da máquina: ")
+        descProblema = input("Descrição do problema: ")
+        data = input("Data: ")
+        inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data)
+
+    elif(opcao == "4"):
+        try:
+            with open("relatorio.csv", "a") as arquivo:
+                for contato in AGENDA:
+                    ramal = AGENDA[contato]['ramal']
+                    setor = AGENDA[contato]['setor']
+                    tempo = AGENDA[contato]['tempo']
+                    ipMaquina = AGENDA[contato]['ipMaquina']
+                    descProblema = AGENDA[contato]['descProblema']
+                    data = AGENDA[contato]['data']
+                    arquivo.write("{},{},{},{},{},{}\n".format(contato,ramal,setor,tempo,ipMaquina,descProblema,data))
+        except Exception as error:
+            print("Erro ao exportar os contatos")
+            print(error)
+
     elif(opcao == "0"):
         print("Fechando o programa")
         break
