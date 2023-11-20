@@ -3,50 +3,56 @@ AGENDA = {} #Váriavel maiscula para declarar como global
 
 
 def mostrarContato():
-    for ID in AGENDA:
-        buscarContato(ID)
+    for contato in AGENDA:
+        buscarContato(contato)
         print("----------------------")
 
-def buscarContato(ID):
+def buscarContato(contato):
     try:
-        print("ID", ID)
-        print("Nome", AGENDA[ID]['nome'])
-        print("Setor", AGENDA[ID]['setor'])
-        print("Ramal", AGENDA[ID]['ramal'])
-        print("Tempo", AGENDA[ID]['tempo'])
-        print("IP", AGENDA[ID]['ipMaquina'])
-        print("Descrição", AGENDA[ID]['descProblema'])
-        print("Data", AGENDA[ID]['data'])
+        print("contato", contato)
+        print("Setor", AGENDA[contato]['setor'])
+        print("Ramal", AGENDA[contato]['ramal'])
+        print("Tempo", AGENDA[contato]['tempo'])
+        print("IP", AGENDA[contato]['ipMaquina'])
+        print("Descrição", AGENDA[contato]['descProblema'])
+        print("Data", AGENDA[contato]['data'])
     except KeyError as error:
         print("Contato inexistente")
         print(error)
 
+def inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data):
 
-
-def inserirContato(nome, ramal,setor,tempo,ipMaquina,descProblema,data,ID):
-
-        AGENDA[ID] = {
-            'nome': nome,
+        AGENDA[contato] = {
             'ramal': ramal,
             'setor': setor,
             'tempo': tempo,
             'ipMaquina': ipMaquina,
             'descProblema': descProblema,
-            'data': data,
-            'ID':ID
+            'data': data
         }
+
+def excluir_contato(contato):
+    try:
+        AGENDA.pop(contato)
+        print('Contato {} excluido com sucesso'.format(contato))
+    except KeyError:
+        print("Contato não encontrado")
+    except Exception as error:
+        print("Um erro ocorreu")
+        print(error)
 
 
 def main():
     print("1 - Mostrar Contato ")
     print("2 - Buscar Contato ")
     print("3 - Inserir Contato ")
-    print("4 - Exportar Relatório ")
+    print("4 - Excluir Contato ")
+    print("5 - Exportar Relatório ")
     print("0 - Para fechar o Programa")
+
 
 while True:
     main()
-
     opcao = input("Digite uma opcao " )
 
     if(opcao == "1"):
@@ -54,8 +60,8 @@ while True:
 
     elif(opcao == "2"):
         try:
-            ID = input("Digite o nome do usuário: ")
-            buscarContato(ID)
+            contato = input("Digite o contato do usuário: ")
+            buscarContato(contato)
         except Exception as error:
             print("Erro ao consultar o usuário")
             print(error)
@@ -63,24 +69,24 @@ while True:
 
     elif(opcao == "3"):
         try:
-            nome = input("Digite o nome do usuário: ")
+            contato = input("Digite o nome do usuário: ")
             ramal = input("Ramal do usuário: ")
             setor = input("Setor: ")
             tempo = input("Tempo estimado em minutos: ")
             ipMaquina = input("IP da máquina: ")
             descProblema = input("Descrição do problema: ")
             data = input("Data: ")
-            ID = random.randint(1,100)
-            inserirContato(nome,ramal,setor,tempo,ipMaquina,descProblema,data,ID)
-
+            inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data)
         except Exception as error:
             print("Erro ao inserir o usuário")
             print(error)
 
-
     elif(opcao == "4"):
-        try:
+        contato = input("Digite o nome do usuário: " )
+        excluir_contato(contato)
 
+    elif(opcao == "5"):
+        try:
             with open("relatorio.csv", "a") as arquivo:
                 for contato in AGENDA:
                     ramal = AGENDA[contato]['ramal']
