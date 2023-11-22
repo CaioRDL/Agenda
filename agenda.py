@@ -1,81 +1,114 @@
-AGENDA = {}
+import datetime
+import random
+AGENDA = {} #Váriavel maiscula para declarar como global
 
-AGENDA['lucas'] = {
-    "tel": "9825-6996",
-    "email": 'lucas@gmail.com',
-    "end": 'Av 1',
-}
 
-AGENDA['luana'] = {
-    "tel": "9825-8596",
-    "email": 'luana69@gmail.com',
-    "end": 'Av 2',
-}
-def mostrarContatos():
+def mostrarContato():
     for contato in AGENDA:
-        buscarContatos(contato)
-        print("-------------")
+        buscarContato(contato)
+        print("----------------------")
 
-def buscarContatos(contato):
-    print("Nome: ", contato)
-    print("Tel: ", AGENDA[contato]['tel'])
-    print("Email:", AGENDA[contato]["email"])
-    print("End: ", AGENDA[contato]['end'])
-    print(AGENDA[contato])
-    print("----------------------------------------")
+def buscarContato(contato):
+    try:
+        print("contato", contato)
+        print("Setor", AGENDA[contato]['setor'])
+        print("Ramal", AGENDA[contato]['ramal'])
+        print("Tempo", AGENDA[contato]['tempo'])
+        print("IP", AGENDA[contato]['ipMaquina'])
+        print("Descrição", AGENDA[contato]['descProblema'])
+        print("Data", AGENDA[contato]['data'])
+    except KeyError as error:
+        print("Contato inexistente")
+        print(error)
 
-def incluirEditarContatos(contato, tel,email,end):
-    AGENDA[contato] = {
-    "tel": tel,
-    "email": email,
-    "end": end,
+def inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data):
+        AGENDA[contato] = {
+            'ramal': ramal,
+            'setor': setor,
+            'tempo': tempo,
+            'ipMaquina': ipMaquina,
+            'descProblema': descProblema,
+            'data': data
+        }
+        if(contato == contato):
+            print("Contato já existente")
+            inserirContato()
 
 
-    }
-    print("Sucesso {} adicionado/editado com sucesso! ".format(contato) )
-    print()
-    # {} .formate() é para adicionar uma várivel
-    #Dentro do local que você adicionou a chave
-    #Será adicionado uma várivel, de acordo com as quantidade de chaves adicionada.
-    #EX: Adicione a {} no texto do print e passe a função apos finalizar o fechamento das aspas
-    # .format(var1),(var2),(var3)
 
-def excluirContato(contato):
+def excluir_contato(contato):
+    try:
+        AGENDA.pop(contato)
+        print('Contato {} excluido com sucesso'.format(contato))
+    except KeyError:
+        print("Contato não encontrado")
+    except Exception as error:
+        print("Um erro ocorreu")
+        print(error)
 
-    AGENDA.pop(contato)
-    print("Contato {} excluido com sucesso".format(contato))
-    print()
 
-def menu():
-    print("----------------------------------------")
-    print("1 - Mostrar todos os contatos na agenda")
-    print("2 - Buscar todos os contatos na agenda")
-    print("3 - Incluir editar contatos na agenda")
-    print("4 - Editar contatos na agenda")
-    print("5 - Excluir os contatos na agenda")
-    print("0 - Fechar agenda")
-    print("----------------------------------------")
+def main():
+    print("1 - Mostrar Contato ")
+    print("2 - Buscar Contato ")
+    print("3 - Inserir Contato ")
+    print("4 - Excluir Contato ")
+    print("5 - Exportar Relatório ")
+    print("0 - Para fechar o Programa")
+
+
 while True:
-    menu()
+    main()
+    opcao = input("Digite uma opcao " )
 
-    opcao = input("Qual opção? ")
-    if (opcao == "1"):
-        mostrarContatos()
-    elif (opcao == "2"):
-        contato = input("Digite o nome do contato: ")
-        buscarContatos(contato)
-    elif (opcao == "3" or opcao == "4"):
-        contato = input("Digite o nome do contato: ")
-        tel = input("Digite o Telefone: ")
-        email = input("Digite o email: ")
-        end = input("Digite o endereço: ")
-        incluirEditarContatos(contato, tel, email, end)
-        mostrarContatos()
-    elif (opcao == "5"):
-        contato = input("Digite o nome do contato? ")
-        excluirContato(contato)
-    elif (opcao == "0"):
+    if(opcao == "1"):
+        mostrarContato()
+
+    elif(opcao == "2"):
+        try:
+            contato = input("Digite o contato do usuário: ")
+            buscarContato(contato)
+        except Exception as error:
+            print("Erro ao consultar o usuário")
+            print(error)
+
+
+    elif(opcao == "3"):
+        try:
+            contato = input("Digite o nome do usuário: ")
+            ramal = input("Ramal do usuário: ")
+            setor = input("Setor: ")
+            tempo = input("Tempo estimado em minutos: ")
+            ipMaquina = input("IP da máquina: ")
+            descProblema = input("Descrição do problema: ")
+            data = datetime.date.today()
+            inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data)
+        except Exception as error:
+            print("Erro ao inserir o usuário")
+            print(error)
+
+    elif(opcao == "4"):
+        contato = input("Digite o nome do usuário: " )
+        excluir_contato(contato)
+
+    elif(opcao == "5"):
+        try:
+            with open("relatorio_.csv", "a") as arquivo:
+                for contato in AGENDA:
+                    ramal = AGENDA[contato]['ramal']
+                    setor = AGENDA[contato]['setor']
+                    tempo = AGENDA[contato]['tempo']
+                    ipMaquina = AGENDA[contato]['ipMaquina']
+                    descProblema = AGENDA[contato]['descProblema']
+
+                    arquivo.write("{},{},{},{},{},{}\n".format(contato,ramal,setor,tempo,ipMaquina,descProblema,data))
+        except Exception as error:
+            print("Erro ao exportar os contatos")
+            print(error)
+
+    elif(opcao == "0"):
         print("Fechando o programa")
         break
+
     else:
-        print("Opção {} invalida".format(opcao))
+        ("Opção inexistente")
+
