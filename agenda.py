@@ -16,23 +16,18 @@ def buscarContato(contato):
         print("Tempo", AGENDA[contato]['tempo'])
         print("IP", AGENDA[contato]['ipMaquina'])
         print("Descrição", AGENDA[contato]['descProblema'])
-        print("Data", AGENDA[contato]['data'])
     except KeyError as error:
         print("Contato inexistente")
         print(error)
 
-def inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data):
+def inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema):
         AGENDA[contato] = {
             'ramal': ramal,
             'setor': setor,
             'tempo': tempo,
             'ipMaquina': ipMaquina,
             'descProblema': descProblema,
-            'data': data
         }
-        if(contato == contato):
-            print("Contato já existente")
-            inserirContato()
 
 
 
@@ -45,7 +40,6 @@ def excluir_contato(contato):
     except Exception as error:
         print("Um erro ocorreu")
         print(error)
-
 
 def main():
     print("1 - Mostrar Contato ")
@@ -80,8 +74,7 @@ while True:
             tempo = input("Tempo estimado em minutos: ")
             ipMaquina = input("IP da máquina: ")
             descProblema = input("Descrição do problema: ")
-            data = datetime.date.today()
-            inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema,data)
+            inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema)
         except Exception as error:
             print("Erro ao inserir o usuário")
             print(error)
@@ -91,16 +84,19 @@ while True:
         excluir_contato(contato)
 
     elif(opcao == "5"):
+        current_date = datetime.date.today()
+        str_current_datetime = str(current_date)
+        file_name = str_current_datetime +".txt"
         try:
-            with open("relatorio_.csv", "a") as arquivo:
+
+            with open(file_name, "a") as arquivo:
                 for contato in AGENDA:
                     ramal = AGENDA[contato]['ramal']
                     setor = AGENDA[contato]['setor']
                     tempo = AGENDA[contato]['tempo']
                     ipMaquina = AGENDA[contato]['ipMaquina']
                     descProblema = AGENDA[contato]['descProblema']
-
-                    arquivo.write("{},{},{},{},{},{}\n".format(contato,ramal,setor,tempo,ipMaquina,descProblema,data))
+                    arquivo.write("{},{},{},{},{},{}\n".format(contato,ramal,setor,tempo,ipMaquina,descProblema))
         except Exception as error:
             print("Erro ao exportar os contatos")
             print(error)
