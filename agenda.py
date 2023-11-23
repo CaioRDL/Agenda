@@ -1,5 +1,6 @@
 import datetime
-import random
+import keyboard
+
 AGENDA = {} #Váriavel maiscula para declarar como global
 
 
@@ -10,12 +11,12 @@ def mostrarContato():
 
 def buscarContato(contato):
     try:
-        print("contato", contato)
-        print("Setor", AGENDA[contato]['setor'])
-        print("Ramal", AGENDA[contato]['ramal'])
-        print("Tempo", AGENDA[contato]['tempo'])
-        print("IP", AGENDA[contato]['ipMaquina'])
-        print("Descrição", AGENDA[contato]['descProblema'])
+        print("contato: ", contato)
+        print("Setor: ", AGENDA[contato]['setor'])
+        print("Ramal: ", AGENDA[contato]['ramal'])
+        print("Tempo: ", AGENDA[contato]['tempo'])
+        print("IP: ", AGENDA[contato]['ipMaquina'])
+        print("Descrição: ", AGENDA[contato]['descProblema'])
     except KeyError as error:
         print("Contato inexistente")
         print(error)
@@ -49,6 +50,25 @@ def main():
     print("5 - Exportar Relatório ")
     print("0 - Para fechar o Programa")
 
+def on_enter_press(e):
+     if e.event_type == keyboard.KEY_DOWN and e.name == 'enter':
+         current_date = datetime.date.today()
+         str_current_datetime = str(current_date)
+         file_name = str_current_datetime +".txt"
+         try:
+             with open(file_name, "a") as arquivo:
+                 for contato in AGENDA:
+                     ramal = AGENDA[contato]['ramal']
+                     setor = AGENDA[contato]['setor']
+                     tempo = AGENDA[contato]['tempo']
+                     ipMaquina = AGENDA[contato]['ipMaquina']
+                     descProblema = AGENDA[contato]['descProblema']
+                     arquivo.write("{},{},{},{},{},{}\n".format(contato,ramal,setor,tempo,ipMaquina,descProblema))
+
+         except Exception as error:
+             print("Erro ao exportar os contatos")
+             print(error)
+
 
 while True:
     main()
@@ -74,7 +94,11 @@ while True:
             tempo = input("Tempo estimado em minutos: ")
             ipMaquina = input("IP da máquina: ")
             descProblema = input("Descrição do problema: ")
+            keyboard.hook(on_enter_press)
             inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema)
+            inserirContato.cache_clear()
+
+
         except Exception as error:
             print("Erro ao inserir o usuário")
             print(error)
@@ -82,24 +106,6 @@ while True:
     elif(opcao == "4"):
         contato = input("Digite o nome do usuário: " )
         excluir_contato(contato)
-
-    elif(opcao == "5"):
-        current_date = datetime.date.today()
-        str_current_datetime = str(current_date)
-        file_name = str_current_datetime +".txt"
-        try:
-
-            with open(file_name, "a") as arquivo:
-                for contato in AGENDA:
-                    ramal = AGENDA[contato]['ramal']
-                    setor = AGENDA[contato]['setor']
-                    tempo = AGENDA[contato]['tempo']
-                    ipMaquina = AGENDA[contato]['ipMaquina']
-                    descProblema = AGENDA[contato]['descProblema']
-                    arquivo.write("{},{},{},{},{},{}\n".format(contato,ramal,setor,tempo,ipMaquina,descProblema))
-        except Exception as error:
-            print("Erro ao exportar os contatos")
-            print(error)
 
     elif(opcao == "0"):
         print("Fechando o programa")
