@@ -19,7 +19,6 @@ def buscarContato(contato):
         print(error)
 
 
-
 def inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema):
     AGENDA[contato] = {
         'ramal': ramal,
@@ -30,15 +29,24 @@ def inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema):
     }
     print()
     print("Contato {} Incluido com sucesso".format(contato))
-
-def importar_contatos(nome_do_arquivo):
     try:
-        with open(nome_do_arquivo, 'r') as arquivo:
-            linhas = arquivo.readlines()
-            for linha in linhas:
-                print(linha.split(','))
-    except FileNotFoundError:
-        print("Arquivo não encontrado")
+        current_date = datetime.date.today()
+        str_current_datetime = str(current_date)
+        file_name = str_current_datetime +".csv"
+        with open(file_name, "a") as arquivo:
+            while True:
+            #for contato in AGENDA:
+                ramal = AGENDA[contato]['ramal']
+                setor = AGENDA[contato]['setor']
+                tempo = AGENDA[contato]['tempo']
+                ipMaquina = AGENDA[contato]['ipMaquina']
+                descProblema = AGENDA[contato]['descProblema']
+                arquivo.write("{},{},{},{},{},{}\n".format(contato,ramal,setor,tempo,ipMaquina,descProblema))
+                break
+
+    except Exception as error:
+        print("Erro ao exportar os contatos")
+        print(error)
 
 def excluir_contato(contato):
     try:
@@ -51,7 +59,6 @@ def excluir_contato(contato):
         print(error)
     except(FileNotFoundError):
         print('Arquivo não encontrado')
-
 def main():
     print("1 - Mostrar Contato ")
     print("2 - Buscar Contato ")
@@ -69,12 +76,11 @@ while True:
         try:
             contato = input("Digite o contato do usuário: ")
             buscarContato(contato)
-
         except Exception as error:
             print("Erro ao consultar o usuário")
             print(error)
-    elif(opcao == "3"):
 
+    elif(opcao == "3"):
         contato = input("Digite o nome do usuário: ")
         ramal = input("Ramal do usuário: ")
         setor = input("Setor: ")
@@ -82,21 +88,6 @@ while True:
         ipMaquina = input("IP da máquina: ")
         descProblema = input("Descrição do problema: ")
         inserirContato(contato,ramal,setor,tempo,ipMaquina,descProblema)
-        try:
-            current_date = datetime.date.today()
-            str_current_datetime = str(current_date)
-            file_name = str_current_datetime +".csv"
-            with open(file_name, "a") as arquivo:
-                 for contato in AGENDA:
-                     ramal = AGENDA[contato]['ramal']
-                     setor = AGENDA[contato]['setor']
-                     tempo = AGENDA[contato]['tempo']
-                     ipMaquina = AGENDA[contato]['ipMaquina']
-                     descProblema = AGENDA[contato]['descProblema']
-                     arquivo.write("{},{},{},{},{},{}\n".format(contato,ramal,setor,tempo,ipMaquina,descProblema))
-        except Exception as error:
-             print("Erro ao exportar os contatos")
-             print(error)
 
     elif(opcao == "0"):
         print("Fechando o programa")
